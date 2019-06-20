@@ -7,9 +7,9 @@ intepreter process (utilizing rfoo.rconsole module). This makes possible to conn
 python interpreter and interact with Live Object Model interactively. This is implemented by exporting some useful
 objects into global scope:
 
-- remote_script - MidiRemoteScript.MidiRemoteScript
-- control_surface - ConsoleControlSurface.ConsoleControlSurface
-- song - Song.Song
+- `remote_script` - `MidiRemoteScript.MidiRemoteScript` instance
+- `control_surface` - `ConsoleControlSurface.ConsoleControlSurface` instance
+- `song` - `Song.Song` instance
 
 Note: This is different than [pylive](https://github.com/ideoforms/pylive) project as _pylive_ connects to
 remote service running in live interpreter and talking OSC protocol. This is great for general high level communication,
