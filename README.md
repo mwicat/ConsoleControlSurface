@@ -2,10 +2,13 @@
 
 ## Description
 
-This remote midi script runs remote console thread in ableton python
-intepreter process (utilizing rfoo.rconsole module). This makes possible to connect remotely to
-python interpreter and interact with Live Object Model interactively. This is implemented by exporting some useful
-objects into global scope:
+This remote midi script runs remote console (REPL) thread in ableton python
+intepreter process (utilizing [https://github.com/tebeka/ingress](ingress) module).
+
+It makes possible to connect remotely to
+python interpreter and interact with Live Object Model interactively.
+
+It also exports some useful objects into global scope:
 
 - `remote_script` - `MidiRemoteScript.MidiRemoteScript` instance
 - `control_surface` - `ConsoleControlSurface.ConsoleControlSurface` instance
@@ -13,8 +16,7 @@ objects into global scope:
 
 Note: This is different than [pylive](https://github.com/ideoforms/pylive) project as _pylive_ connects to
 remote service running in live interpreter and talking OSC protocol. This is great for general high level communication,
-but I believe interacting with interpreter directly is more helpful for debugging, exploration for fun and profit
-or whatever.
+but I believe interacting with interpreter directly is more helpful for debugging and exploration.
 
 ## Setup
 
@@ -32,16 +34,10 @@ remote midi script directory.
 
 4. (Optionally) check in log that everything runs fine
 
-5. Install rfoo
+5. Attach to REPL interpreter
 
 ```
-sudo pip install rfoo
-```
-
-5. Attach to console
-
-```
-rconsole -p 8484
+telnet localhost 8484
 ```
 
 It make some time to initialize, but should run ok afterwards. 
@@ -50,7 +46,7 @@ It make some time to initialize, but should run ok afterwards.
 
 Some examples:
 
-```
+```python
 >>> song
 <Song.Song object at 0x1287190d8>
 >>> dev = song.tracks[0].devices[0]

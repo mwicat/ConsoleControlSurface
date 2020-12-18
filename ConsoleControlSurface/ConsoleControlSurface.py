@@ -1,6 +1,8 @@
 from _Framework.ControlSurface import ControlSurface
 
-from .util import spawn_console
+import ingress
+
+DEFAULT_ADDRESS = ('localhost', 8484)
 
 
 class ConsoleControlSurface(ControlSurface):
@@ -12,12 +14,12 @@ class ConsoleControlSurface(ControlSurface):
         with self.component_guard():
             pass
 
-        namespace = {
+        env = {
             'remote_script': c_instance,
             'control_surface': self,
             'song': c_instance.song(),
         }
 
-        spawn_console(namespace)
+        self.thread = ingress.install(address=DEFAULT_ADDRESS, env=env)
 
         self.log_message('Initialized ConsoleControlSurface.')
