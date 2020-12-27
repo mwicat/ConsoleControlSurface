@@ -65,7 +65,7 @@ class PyHandler(socketserver.StreamRequestHandler):
 
     def finish(self):
         try:
-            super().finish()
+            socketserver.StreamRequestHandler.finish(self)
         except socket.error:
             pass
 
