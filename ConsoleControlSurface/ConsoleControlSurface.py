@@ -1,6 +1,6 @@
 from _Framework.ControlSurface import ControlSurface
 
-import ingress
+from . import ingress
 
 DEFAULT_ADDRESS = ('localhost', 8484)
 
