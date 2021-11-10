@@ -3,7 +3,7 @@
 ## Description
 
 This remote midi script runs remote console (REPL) thread in ableton python
-intepreter process (utilizing [https://github.com/tebeka/ingress](ingress) module).
+intepreter process (utilizing [ingress](https://github.com/tebeka/ingress) module).
 
 It makes possible to connect remotely to
 python interpreter and interact with Live Object Model interactively.
@@ -49,6 +49,8 @@ Some examples:
 ```python
 >>> song
 <Song.Song object at 0x1287190d8>
+>>> [t.name for t in song.tracks]
+['1-Audio', '2-Audio', '3-Audio', '4-Audio', '5-Audio', '6-Audio', '7-Audio', '8-Audio', '9-Audio', '10-Audio', '11-Drum Rack', '12-Drum Rack', '13-Drum Rack', '14-Drum Rack', '15-Drum Rack', '16-Drum Rack', '17-Drum Rack', '18-Drum Rack', '19-MIDI', '20 Record']
 >>> dev = song.tracks[0].devices[0]
 >>> dev.name
 u'Utility'
@@ -125,3 +127,8 @@ u'Utility'
 u'Device On'
 >>> p.value = 0
 ```
+
+## Extra documentation
+
+- [LOM - The Live Object Model](https://docs.cycling74.com/max8/vignettes/live_object_model)
+- [Unofficial Live API documentation](https://structure-void.com/PythonLiveAPI_documentation/)
