@@ -13,6 +13,7 @@ class ConsoleControlSurface(ControlSurface):
         global INITIALIZED
 
         if INITIALIZED:
+            # TODO: not sure why but class seems to be instantiated twice
             return
 
         self.log_message('Initializing ConsoleControlSurface...')
