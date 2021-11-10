@@ -12,7 +12,10 @@ __author__ = 'Miki Tebeka <miki.tebeka@gmail.com>'
 __version__ = '0.4.0'
 
 from .contextlib2 import redirect_stdout, redirect_stderr
-import SocketServer as socketserver
+try:
+    import SocketServer as socketserver
+except ImportError:
+    import socketserver as socketserver
 from threading import Thread
 from traceback import format_exc
 import socket

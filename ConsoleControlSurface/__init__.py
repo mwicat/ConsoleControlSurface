@@ -1,4 +1,4 @@
-from ConsoleControlSurface import ConsoleControlSurface
+from .ConsoleControlSurface import ConsoleControlSurface
 
 
 def create_instance(c_instance):
