@@ -31,8 +31,7 @@ class REPLHandler(object):
         self._server_sock.setblocking(0)
 
         self.read_list = [self._server_sock]
-        self.env = env
-        self.envs = {}
+        self.env = env.copy()
         self.prompt = '>>> '
 
         self._local_addr = (host, port)
@@ -54,19 +53,10 @@ class REPLHandler(object):
 
     def send(self, sock, msg):
         sock.send(msg.encode('utf-8'))
-    
-    def create_env(self, sock):
-        self.envs[sock.fileno()] = self.env.copy()
 
-    def get_env(self, sock):
-        return self.envs[sock.fileno()]
-
-    def remove_env(self, sock):
-        del self.envs[sock.fileno()]
-    
     def close_session(self, sock):
-        self.remove_env(sock)
-        self.read_list.remove(sock)
+        if sock in self.read_list:
+            self.read_list.remove(sock)
         try:
             sock.close()
         except socket.error:
@@ -89,18 +79,18 @@ class REPLHandler(object):
                         self._process_data(data, sock)
                     else:
                         self.close_session(sock)
+                    self.send_prompt(sock)
                 except socket.error:
                     self.close_session(sock)
                 except Exception:
                     error = traceback.format_exc()
                     self.log_message(error)
                     self.send(sock, error)
-                self.send_prompt(sock)
+                    self.send_prompt(sock)
 
     def _accept_client(self):
         client_socket, address = self._server_sock.accept()
         self.read_list.append(client_socket)
-        self.create_env(client_socket)
         self.send_prompt(client_socket)
         self.log_message("Connection from {}".format(
             address))
@@ -117,13 +107,12 @@ class REPLHandler(object):
             self.close_session(sock)
             return
 
-        env = self.get_env(sock)
         try:
-            value = eval(expr, globals(), env)  # nosec
+            value = eval(expr, globals(), self.env)  # nosec
             out = format(value) + '\n'
             self.send(sock, out)
         except Exception:
-            exec(expr, env)  # nosec
+            exec(expr, self.env)  # nosec
 
     def shutdown(self):
         self._server_sock.close()
