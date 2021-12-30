@@ -20,4 +20,4 @@ function install_script {
     echo "Installed into '$target_path'"
 }
 
-install_script LiveOSC2
+install_script ConsoleControlSurface

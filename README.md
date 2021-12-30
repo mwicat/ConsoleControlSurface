@@ -2,45 +2,54 @@
 
 ## Description
 
-This remote midi script runs remote console (REPL) thread in ableton python
-intepreter process (utilizing [ingress](https://github.com/tebeka/ingress) module).
+This is [Python MIDI Remote
+Script](https://structure-void.com/ableton-live-midi-remote-scripts/) written
+for Ableton Live 11. It enables you to connect remotely to Python interpreter
+embedded in Live process and play with Live Object Model interactively.
 
-It makes possible to connect remotely to
-python interpreter and interact with Live Object Model interactively.
+## How it works
 
-It also exports some useful objects into global scope:
+This script will use Live scheduler to execute code at constant intervals. The
+code will use `select()` system call to check if there are any user code coming
+over the network to execute in non-blocking manner.
+
+User code is executed in the main (UI) thread. This is desired since this is how
+standard remote midi scripts work and there would be problems with
+accessing Live objects from other threads. Please have this in mind when executing
+long running code as Live will wait for it to finish to continue with normal work.
+
+Network communication is established by opening TCP server socket on
+`localhost:8484`.
+
+The REPL will have some useful variables available in the global scope:
 
 - `remote_script` - `MidiRemoteScript.MidiRemoteScript` instance
 - `control_surface` - `ConsoleControlSurface.ConsoleControlSurface` instance
-- `song` - `Song.Song` instance
+- `live_app` - `Live.Application` instance
+- `live_set` / `song` - `Song.Song` instance
 
-Note: This is different than [pylive](https://github.com/ideoforms/pylive) project as _pylive_ connects to
-remote service running in live interpreter and talking OSC protocol. This is great for general high level communication,
-but I believe interacting with interpreter directly is more helpful for debugging and exploration.
+Note: This project is different than [pylive](https://github.com/ideoforms/pylive), since _pylive_ connects to remote service running in live interpreter
+and talking OSC protocol. This is great for general high level communication,
+but I believe interacting with interpreter directly is more helpful for
+debugging and exploration of remote midi scripts.
 
 ## Setup
 
-1. Install scripts into ableton remote midi scripts directory. It creates symbolic link to this repository package
-in Live 10 global remote script directory (needs sudo). If you don't want this, just copy ConsoleControlSurface to
-remote midi script directory.
+1. Install remote script into your remote midi scripts directory. I have
+   attached a simple shell script `install_macos.sh` for MacOS that will create
+   symbolic link in user-specific directory
+   `"$HOME/Music/Ableton/User Library/Remote Scripts"`. If that works for you,
+   use it. 
 
-```
-./install_osx.sh
-```
+2. Restart Live
 
-2. Restart Ableton
+3. Add `ConsoleControlSurface` as control surface
 
-3. Add ConsoleControlSurface as control surface
+5. Connect to REPL interpreter:
 
-4. (Optionally) check in log that everything runs fine
-
-5. Attach to REPL interpreter
-
-```
+```shell
 telnet localhost 8484
 ```
-
-It make some time to initialize, but should run ok afterwards. 
 
 6. Explore!
 
@@ -127,6 +136,21 @@ u'Utility'
 u'Device On'
 >>> p.value = 0
 ```
+
+## Debugging
+
+Check if there are any errors in the Live log file. As noted in
+[Where to find Crash Reports](https://help.ableton.com/hc/en-us/articles/209071629-Where-to-find-Crash-Reports)
+here are the possible locations of the log file:
+
+- Windows - `\Users\[username]\AppData\Roaming\Ableton\Live x.x.x\Preferences\Log.txt`
+- Mac - `/Users/[username]/Library/Preferences/Ableton/Live x.x.x/Log.txt`
+
+## Configuration
+
+You can customize some settings instead of using defaults. You can do this by
+creating and editing file `~/.ccsurface.ini`. See `config/ccsurface.ini.example`
+on what settings can be customized this way.
 
 ## Extra documentation
 
