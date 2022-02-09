@@ -5,7 +5,9 @@
 This is [Python MIDI Remote
 Script](https://structure-void.com/ableton-live-midi-remote-scripts/) written
 for Ableton Live 11. It enables you to connect remotely to Python interpreter
-embedded in Live process and play with Live Object Model interactively.
+embedded in Live process and play with
+the [Live Object Model](https://docs.cycling74.com/max8/vignettes/live_object_model)
+interactively.
 
 ## How it works
 
