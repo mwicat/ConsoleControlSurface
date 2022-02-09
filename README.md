@@ -9,11 +9,20 @@ embedded in Live process and play with
 the [Live Object Model](https://docs.cycling74.com/max8/vignettes/live_object_model)
 interactively.
 
+Note: this script will open listening port on the local network interface. Although
+this won't allow for remote connections to your computer, if some malicious process
+on the same machine happens to connect to that port, it can expose your machine to arbitrary code
+execution. Be sure to understand the implications of this behavior. Ideally, enable
+this control surface only when you need to use it and disable it when done. The risk
+could be also mitigated with the implementation of authentication mechanism which may happen
+in the future.
+
 ## How it works
 
-This script will use Live scheduler to execute code at constant intervals. The
-code will use `select()` system call to check if there are any user code coming
-over the network to execute in non-blocking manner.
+This script uses built-in Live task scheduler to periodically check if there is any
+code coming from the local socket to execute (the
+check logic uses `select()` system call to examine socket receive buffer in non-blocking manner).
+You can then connect to the socket using text-mode TCP client like telnet, netcat or socat.
 
 User code is executed in the main (UI) thread. This is desired since this is how
 standard remote midi scripts work and there would be problems with
